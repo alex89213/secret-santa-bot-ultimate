@@ -91,3 +91,9 @@ export type ExchangeDetail = {
   candidate_available: boolean;
   deliveries: Delivery[];
 };
+/** Whether each person in an exchange has added anything to their wishlist, never what they added. */
+export type WishlistStatus = {
+  people: { id: string; display_name: string; has_wishes: boolean }[];
+  /** True when a reminder went out in the last hour, so another can't be sent yet. */
+  reminded_recently: boolean;
+};
