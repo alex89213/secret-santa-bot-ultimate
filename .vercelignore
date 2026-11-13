@@ -1,0 +1,16 @@
+# keep local secrets, notes and build output out of Vercel CLI uploads
+.env*
+!.env.example
+.local/
+AGENTS.md
+node_modules/
+.next/
+.next-e2e/
+output/
+test-results/
+playwright-report/
+coverage/
+supabase/.temp/
+supabase/.branches/
+*.tsbuildinfo
+*.log

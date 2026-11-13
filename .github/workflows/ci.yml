@@ -1,0 +1,35 @@
+# Description:  Runs lint, type checks, every test suite and a production build on each push and
+#               pull request.
+# Author:       Alex Wu
+# Dependencies: Node.js 24, Supabase CLI, Playwright
+# Usage:        runs automatically in GitHub Actions
+name: Verify Secret Santa Bot Ultimate
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  application:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm run check:privacy
+      - run: npx supabase start -x realtime,storage-api,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor > "$RUNNER_TEMP/supabase-start.log" 2>&1
+        # Keep generated local credentials out of CI logs.
+        shell: bash
+        env:
+          SUPABASE_TELEMETRY_DISABLED: '1'
+      - run: node scripts/local-env.mjs
+      - run: npm run test:db
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - if: always()
+        run: npx supabase stop

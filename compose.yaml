@@ -1,0 +1,13 @@
+# Description:  Runs the production image with settings from .env.local.
+# Author:       Alex Wu
+# Dependencies: Dockerfile, .env.local
+# Usage:        docker compose up --build -d
+services:
+  secret-santa-bot-ultimate:
+    build: .
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env.local
+    restart: unless-stopped
+    init: true

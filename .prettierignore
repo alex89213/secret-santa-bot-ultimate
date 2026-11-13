@@ -1,0 +1,12 @@
+.next
+.next-e2e
+node_modules
+output
+test-results
+playwright-report
+package-lock.json
+supabase/.temp
+supabase/migrations
+.env.local
+next-env.d.ts
+supabase/config.toml

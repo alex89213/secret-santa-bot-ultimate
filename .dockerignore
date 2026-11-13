@@ -1,0 +1,12 @@
+node_modules
+.next
+.next-e2e
+.git
+.env*
+output
+test-results
+playwright-report
+coverage
+supabase/.temp
+supabase/.branches
+*.log
