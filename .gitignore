@@ -12,7 +12,4 @@ supabase/.branches/
 *.tsbuildinfo
 *.log
 .DS_Store
-.vercel/
-
 .vercel
-.env*
