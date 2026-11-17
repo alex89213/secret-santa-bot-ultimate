@@ -20,7 +20,7 @@ The dry run lists any new migrations. Back up first if there are any (see [Opera
 
 Instead of the CLI, you can import the repository in the Vercel dashboard with **Add New → Project**. Vercel then deploys every push to your production branch.
 
-Set the same environment variables as in [Setup](SETUP.md#5-deploy-to-vercel) under **Settings → Environment Variables**. Add Supabase's redirect for your site's address as in [step 6](SETUP.md#6-tell-supabase-your-sites-address).
+Set the same environment variables as in [Setup](SETUP.md#5-deploy-to-vercel) under **Settings → Environment Variables**. Add the Supabase and Discord redirects for your site's address as in [step 6](SETUP.md#6-tell-supabase-and-discord-your-sites-address).
 
 ## Custom domain
 
@@ -28,7 +28,8 @@ Add the domain in Vercel under **Settings → Domains**. Then:
 
 1. Set `APP_URL` in Vercel to the exact address, for example `https://santa.example.org`, with no trailing slash.
 2. In Supabase, change the Site URL and add `https://santa.example.org/auth/callback` to the redirect URLs.
-3. Deploy again.
+3. In the Discord application's **OAuth2** settings, add the redirect `https://santa.example.org/bot/added`.
+4. Deploy again.
 
 ## Environment variables
 

@@ -30,7 +30,7 @@ You'll collect a few values from Supabase and Discord along the way. Step 5 has 
 | Discord client secret    | Step 3                    | Supabase Discord provider                         |
 | Setup secret             | Generated for you, step 5 | `INSTANCE_SETUP_SECRET`, then entered at `/setup` |
 | Cron secret              | Generated for you, step 5 | `CRON_SECRET`                                     |
-| Site address             | Vercel, in step 5         | Supabase URL settings in step 6                   |
+| Site address             | Vercel, in step 5         | Supabase and Discord settings in step 6           |
 
 ## 1. Create the Supabase project
 
@@ -114,7 +114,7 @@ When it finishes, it prints `Production URL: https://YOUR-SITE.vercel.app`. That
 
 To change a setting later, edit `.env.production.local`, run `npm run vercel:env` again, then deploy again.
 
-## 6. Tell Supabase your site's address
+## 6. Tell Supabase and Discord your site's address
 
 In Supabase, go to **Authentication → URL Configuration**:
 
@@ -123,29 +123,32 @@ In Supabase, go to **Authentication → URL Configuration**:
 
 New projects start with a Site URL of `http://localhost:3000`. Replace it, since sign-in sends people back to the Site URL when it doesn't recognize an address.
 
+Then, in the Discord Developer Portal, open your application's **OAuth2** page. Under **Redirects**, add `https://YOUR-SITE.vercel.app/bot/added` next to the one from step 3 and save. It sends you back to the site after you invite the bot, so your server is set up for you.
+
 ## 7. Claim the site and add your server
 
 1. Open `https://YOUR-SITE.vercel.app` and choose **Sign in with Discord**.
 2. Go to `https://YOUR-SITE.vercel.app/setup` and enter the setup secret, `INSTANCE_SETUP_SECRET` in `.env.production.local`. The first person to do this becomes the owner, and it only works once.
-3. On the **Servers** page, follow the **invite the bot** link and pick your server. The bot needs no permissions. It only reads the member list and sends DMs.
-4. In Discord, turn on **User Settings → Advanced → Developer Mode**. Then right-click your server and choose **Copy Server ID**.
-5. Back on **Servers**, add the server with that ID.
-6. Open the server, go to **People**, and add everyone taking part. They don't need to have signed in yet.
+3. On the **Servers** page, choose **Invite the bot** and pick your server in Discord. You come straight back to the site with the server set up and named. The bot needs no permissions. It only reads the member list and sends DMs.
+4. Open the server, go to **People**, and add everyone taking part. They don't need to have signed in yet.
+
+If the bot is already in your server, the server shows up on the **Servers** page under **Ready to set up** instead. You can also add a server by its ID there.
 
 You're ready to run an exchange. On **Exchanges**, create one, pick who's taking part, **Draw names**, **Lock in matches**, then **Send everyone their match**. To record years from before you used the site, use the server's **History** tab.
 
 ## If something goes wrong
 
-| What happens                                 | Check                                                                                  |
-| -------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Signing in sends you to `localhost`          | Supabase Site URL and Redirect URLs (step 6)                                           |
-| Discord says the redirect is invalid         | The Discord OAuth2 redirect is exactly `https://YOUR-REF.supabase.co/auth/v1/callback` |
-| "Discord sign-in couldn't be verified"       | The Discord provider's client ID and secret in Supabase (step 4)                       |
-| The login page says the site isn't connected | The three Supabase values, then `npm run vercel:env` and deploy again                  |
-| Adding the server fails                      | The bot is in the server (step 7), and the ID is the server's, not a channel's         |
-| The setup secret is rejected as too short    | Run `npm run vercel:env`, then deploy again                                            |
-| No invite link on the Servers page           | `DISCORD_BOT_TOKEN` is set correctly                                                   |
-| No people show up on the People tab          | Server Members Intent is on (step 3)                                                   |
-| Someone doesn't get a DM                     | They allow DMs from server members in that server's privacy settings                   |
+| What happens                                  | Check                                                                                            |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Signing in sends you to `localhost`           | Supabase Site URL and Redirect URLs (step 6)                                                     |
+| Signing in says the redirect is invalid       | The Discord OAuth2 redirect is exactly `https://YOUR-REF.supabase.co/auth/v1/callback`           |
+| Inviting the bot says the redirect is invalid | `https://YOUR-SITE.vercel.app/bot/added` is listed under Discord **OAuth2 → Redirects** (step 6) |
+| "Discord sign-in couldn't be verified"        | The Discord provider's client ID and secret in Supabase (step 4)                                 |
+| The login page says the site isn't connected  | The three Supabase values, then `npm run vercel:env` and deploy again                            |
+| Adding the server fails                       | The bot is in the server (step 7), and the ID is the server's, not a channel's                   |
+| The setup secret is rejected as too short     | Run `npm run vercel:env`, then deploy again                                                      |
+| The site can't reach Discord for the invite   | `DISCORD_BOT_TOKEN` is set correctly                                                             |
+| No people show up on the People tab           | Server Members Intent is on (step 3)                                                             |
+| Someone doesn't get a DM                      | They allow DMs from server members in that server's privacy settings                             |
 
 After changing any setting, deploy again for it to take effect.

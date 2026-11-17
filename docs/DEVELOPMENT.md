@@ -15,7 +15,7 @@ npm run dev
 
 Signing in needs a Discord application. Use a separate one from your live site.
 
-1. In the Discord app's **OAuth2** settings, add the redirect `http://127.0.0.1:54321/auth/v1/callback`.
+1. In the Discord app's **OAuth2** settings, add the redirects `http://127.0.0.1:54321/auth/v1/callback` for sign-in and `http://localhost:3000/bot/added` for inviting the bot.
 2. In `supabase/config.toml`, set `enabled = true` under `[auth.external.discord]`.
 3. Set `SUPABASE_AUTH_EXTERNAL_DISCORD_CLIENT_ID` and `SUPABASE_AUTH_EXTERNAL_DISCORD_SECRET` in your shell, then restart the stack with `npx supabase stop` and the `start` command above.
 4. Add `DISCORD_BOT_TOKEN` to `.env.local` to load server members and send DMs.
