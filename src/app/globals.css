@@ -357,6 +357,20 @@ p {
   align-content: start;
   min-width: 0;
 }
+.set-up {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+  min-width: 0;
+  max-width: 60%;
+}
+.card details > summary {
+  cursor: pointer;
+  width: fit-content;
+}
+.card details[open] > summary {
+  margin-bottom: 14px;
+}
 .card-title {
   font-weight: 700;
   font-size: 17px;

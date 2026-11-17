@@ -69,9 +69,10 @@ const handlers: Handlers = {
     await operation('owner_check', user.id);
     const rest = new DiscordRest();
     const guild = await rest.guild(payload.guild_id);
+    // without a name, use the server's Discord name, cut by whole characters so an emoji isn't split
     const group = await operation<{ id: string }>('activate_group', user.id, {
-      ...payload,
       guild_id: guild.id,
+      name: payload.name || Array.from(guild.name).slice(0, 80).join(''),
     });
     // save the owner's name as it appears in this server, if the owner is a member of it
     const own = discordId(user);

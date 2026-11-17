@@ -73,6 +73,10 @@ export class DiscordRest {
   application() {
     return this.request<{ id: string; name: string }>('/applications/@me');
   }
+  /** Lists the servers the bot is in, up to 200, which is plenty for a self-hosted site. */
+  guilds() {
+    return this.request<{ id: string; name: string }[]>('/users/@me/guilds?limit=200');
+  }
   guild(id: string) {
     return this.request<{ id: string; name: string }>(`/guilds/${id}`);
   }

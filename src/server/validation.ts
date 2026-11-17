@@ -44,7 +44,8 @@ export const inputs = {
   context: z.object({}),
   group: z.object({ group_id }),
   exchange: z.object({ exchange_id }),
-  activate_group: z.object({ guild_id: snowflake, name: name.max(80) }),
+  // the name is optional and defaults to the server's name in Discord
+  activate_group: z.object({ guild_id: snowflake, name: name.max(80).optional() }),
   member_save: z.object({
     group_id,
     discord_id: snowflake,

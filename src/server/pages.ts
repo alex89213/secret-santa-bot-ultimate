@@ -33,13 +33,12 @@ export const pageContext = cache(async () => {
   return operation<Context>('context', user.id, { display_name: displayName(user) });
 });
 /**
- * Builds the link for adding the bot to a server, using the application the bot token belongs to.
- * Returns null when Discord can't be reached, so the page still loads.
+ * Lists the servers the bot is in, for one-click setup. Returns null when Discord can't be reached,
+ * so the page still loads.
  */
-export const botInviteUrl = cache(async () => {
+export const botServers = cache(async () => {
   try {
-    const app = await new DiscordRest().application();
-    return `https://discord.com/oauth2/authorize?client_id=${app.id}&scope=bot&permissions=0`;
+    return await new DiscordRest().guilds();
   } catch {
     return null;
   }
