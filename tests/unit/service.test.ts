@@ -285,3 +285,27 @@ it('sends no reminders when the database refuses the round', async () => {
   ).rejects.toThrow('less than an hour');
   expect(mocks.channel).not.toHaveBeenCalled();
 });
+it("uses the server's Discord name when no name is given", async () => {
+  mocks.operation.mockImplementation(async (name: string) =>
+    name === 'activate_group' ? { id: 'g' } : { owner: true },
+  );
+  mocks.guild.mockResolvedValue({ id: '800000000000000001', name: 'Cozy Server' });
+  mocks.member.mockResolvedValue(null);
+  await execute(user, { operation: 'activate_group', payload: { guild_id: '800000000000000001' } });
+  expect(mocks.operation).toHaveBeenCalledWith('activate_group', 'user', {
+    guild_id: '800000000000000001',
+    name: 'Cozy Server',
+  });
+});
+it('shortens a long Discord server name to 80 characters without splitting an emoji', async () => {
+  mocks.operation.mockImplementation(async (name: string) =>
+    name === 'activate_group' ? { id: 'g' } : { owner: true },
+  );
+  mocks.guild.mockResolvedValue({ id: '800000000000000001', name: 'a'.repeat(79) + '🎄🎄' });
+  mocks.member.mockResolvedValue(null);
+  await execute(user, { operation: 'activate_group', payload: { guild_id: '800000000000000001' } });
+  expect(mocks.operation).toHaveBeenCalledWith('activate_group', 'user', {
+    guild_id: '800000000000000001',
+    name: 'a'.repeat(79) + '🎄',
+  });
+});

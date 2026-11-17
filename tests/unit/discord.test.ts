@@ -126,3 +126,8 @@ it('writes the wishlist reminder with a link to the wishlist page', () => {
     ].join('\n'),
   );
 });
+it("lists the bot's servers", async () => {
+  const transport = vi.fn().mockResolvedValue(Response.json([{ id: '1', name: 'A' }]));
+  expect(await new DiscordRest('test', transport).guilds()).toEqual([{ id: '1', name: 'A' }]);
+  expect(transport.mock.calls[0][0]).toBe('https://discord.com/api/v10/users/@me/guilds?limit=200');
+});

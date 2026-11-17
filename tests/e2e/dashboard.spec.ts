@@ -140,6 +140,26 @@ test('desktop and mobile private exchange workflow', async ({ page, context }) =
   await page.getByRole('button', { name: 'Become the owner' }).click();
   await expect(page).toHaveURL(/\/servers$/);
   await expect(page.getByRole('heading', { name: 'Add a Discord server' })).toBeVisible();
+  // the invite should start on the site, with the server ID form kept as a fallback
+  await expect(page.getByRole('link', { name: 'Invite the bot' })).toHaveAttribute(
+    'href',
+    '/bot/invite',
+  );
+  // without a bot token the page should still load and say the bot's servers can't be listed
+  if (!process.env.DISCORD_BOT_TOKEN)
+    await expect(page.getByText('Couldn’t reach Discord to list the bot’s servers.')).toBeVisible();
+  await expect(page.getByLabel('Discord server ID')).toBeHidden();
+  await page.getByText('Add by server ID instead').click();
+  await expect(page.getByLabel('Discord server ID')).toBeVisible();
+  await page.screenshot({ path: 'output/playwright/servers-desktop.png', fullPage: true });
+  // a return from Discord that the site didn't start should set nothing up
+  await page.goto('/bot/added?guild_id=720000000000000009&state=forged');
+  await expect(page).toHaveURL(/\/servers\?invite=expired$/);
+  await expect(page.getByText('That invite timed out. Invite the bot again.')).toBeVisible();
+  expect(
+    (await pool.query('select count(*)::int n from public.ssbu_groups where created_by=$1', [uid]))
+      .rows[0].n,
+  ).toBe(0);
   groupId = randomUUID();
   await pool.query(
     'insert into public.ssbu_groups(id,name,guild_id,created_by) values($1,$2,$3,$4)',
